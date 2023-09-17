@@ -9,55 +9,55 @@ export default async function Table() {
   let startTime = Date.now()
 
   try {
-    data = await sql`SELECT * FROM users`
+    data = await sql`SELECT * FROM skateparks`
   } catch (e: any) {
-    if (e.message === `relation "users" does not exist`) {
+    if (e.message === `relation "skateparks" does not exist`) {
       console.log(
         'Table does not exist, creating and seeding it with dummy data now...'
       )
       // Table is not created yet
       await seed()
       startTime = Date.now()
-      data = await sql`SELECT * FROM users`
+      data = await sql`SELECT * FROM skateparks`
     } else {
       throw e
     }
   }
 
-  const { rows: users } = data
+  const { rows: skateparks } = data
   const duration = Date.now() - startTime
 
   return (
     <div className="bg-white/30 p-12 shadow-xl ring-1 ring-gray-900/5 rounded-lg backdrop-blur-lg max-w-xl mx-auto w-full">
       <div className="flex justify-between items-center mb-4">
         <div className="space-y-1">
-          <h2 className="text-xl font-semibold">Recent Users</h2>
+          <h2 className="text-xl font-semibold">Recent Skateparks</h2>
           <p className="text-sm text-gray-500">
-            Fetched {users.length} users in {duration}ms
+            Fetched {skateparks.length} skateparks in {duration}ms
           </p>
         </div>
         <RefreshButton />
       </div>
       <div className="divide-y divide-gray-900/5">
-        {users.map((user) => (
+        {skateparks.map((skatepark) => (
           <div
-            key={user.name}
+            key={skatepark.name}
             className="flex items-center justify-between py-3"
           >
             <div className="flex items-center space-x-4">
-              <Image
+              {/* <Image
                 src={user.image}
                 alt={user.name}
                 width={48}
                 height={48}
                 className="rounded-full ring-1 ring-gray-900/5"
-              />
+              /> */}
               <div className="space-y-1">
-                <p className="font-medium leading-none">{user.name}</p>
-                <p className="text-sm text-gray-500">{user.email}</p>
+                <p className="font-medium leading-none">{skatepark.name}</p>
+                <p className="text-sm text-gray-500">{skatepark.email}</p>
               </div>
             </div>
-            <p className="text-sm text-gray-500">{timeAgo(user.createdAt)}</p>
+            <p className="text-sm text-gray-500">{skatepark.description}</p>
           </div>
         ))}
       </div>
